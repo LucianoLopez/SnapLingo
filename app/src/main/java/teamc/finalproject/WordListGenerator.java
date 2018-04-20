@@ -30,6 +30,7 @@ public class WordListGenerator {
         SpanishTranslationTask stt = new SpanishTranslationTask();
         String params = translations(word);
         stt.execute(params);
+        words[1] = stt.result;
         return words;
     }
     /**
