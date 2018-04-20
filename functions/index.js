@@ -13,20 +13,14 @@ const client = new vision.ImageAnnotatorClient();
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
-exports.callVision = functions.storage.object().onFinalize(event => {
-    const object = event.data;
+exports.callVision = functions.storage.object().onFinalize(object => {
     const fileBucket = object.bucket;
     const filePath = object.name;
     const gcsPath = `gs://${fileBucket}/${filePath}`;
-    const req = {
-      source: {
-        imageUri: gcsPath
-      }
-    };
 
     // Call the Vision API's web detection and safe search detection endpoints
-    console.log(`doingrequest: ${req}`);
-    return client.labelDetection(req).then(response => {
+    console.log(`doingrequest: ${gcsPath}`);
+    return client.labelDetection(gcsPath).then(response => {
         let labels = response[0].labelAnnotations;
         return {labels: labels};
     }).then((visionResp) => {
