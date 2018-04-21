@@ -2,16 +2,10 @@ package teamc.finalproject;
 
 // Created by Andrew
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import java.util.List;
-
-public class ScoreboardActivity extends AppCompatActivity {
-
-    private Game game;
-    private List<String> playerList;
-
+public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
