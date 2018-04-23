@@ -38,14 +38,20 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -66,22 +72,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BroadcastReceiver mBroadcastReceiver;
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
 
     private Uri mDownloadUrl = null;
     private Uri mFileUri = null;
+    private String mResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase Auth
+        // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
 
         // Click listeners
         findViewById(R.id.button_camera).setOnClickListener(this);
         findViewById(R.id.button_sign_in).setOnClickListener(this);
-        findViewById(R.id.button_download).setOnClickListener(this);
+        findViewById(R.id.button_detections).setOnClickListener(this);
 
         // Restore instance state
         if (savedInstanceState != null) {
@@ -268,6 +277,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    private void retrieveMetadata () {
+
+        DocumentReference docRef = mFirestore.collection("images").document(mFileUri.getLastPathSegment());
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + task.getResult().getData());
+                        mResponse = ("" +  task.getResult().getData()).replaceAll("=", ":");
+                    } else {
+                        Log.d(TAG, "No such document");
+                        mResponse = "No stored label data";
+                    }
+                    updateUI(mAuth.getCurrentUser());
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
     private void onUploadResultIntent(Intent intent) {
         // Got a new intent from MyUploadService with a success or failure
         mDownloadUrl = intent.getParcelableExtra(MyUploadService.EXTRA_DOWNLOAD_URL);
@@ -295,6 +328,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) findViewById(R.id.picture_download_uri))
                     .setText(null);
             findViewById(R.id.layout_download).setVisibility(View.GONE);
+        }
+
+        if (mResponse != null) {
+            // Manually filter the proto message to the label descriptions
+            ArrayList<String> labels = new ArrayList<String>();
+            String labelstr = "";
+            for (String it : mResponse.split(",")) {
+                if (it.split(":")[0].contains("description")) {
+                    labels.add(it.split(":")[1]);
+                    labelstr += it.split(":")[1] + " / ";
+                }
+            }
+
+            // Remove trailing slash
+            labelstr = labelstr.substring(0, labelstr.length() - 2);
+            Log.d(TAG,"Found: " + labels.size() + " labels.");
+            ((TextView) findViewById(R.id.response_data))
+                    .setText(labelstr);
         }
     }
 
@@ -347,8 +398,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             launchCamera();
         } else if (i == R.id.button_sign_in) {
             signInAnonymously();
-        } else if (i == R.id.button_download) {
-            beginDownload();
+        } else if (i == R.id.button_detections) {
+            retrieveMetadata();
         }
     }
 }

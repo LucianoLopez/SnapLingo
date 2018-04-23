@@ -99,13 +99,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_1"
                 android:layout_marginTop="@dimen/margin_2"
-                android:text="@string/label_download" />
+                android:text="Vision Labels" />
 
             <Button
-                android:id="@+id/button_download"
+                android:id="@+id/button_detections"
                 android:layout_width="@dimen/standard_field_width"
                 android:layout_height="wrap_content"
-                android:text="@string/download" />
+                android:text="@string/detections" />
+
+            <TextView
+                android:id="@+id/response_data"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </LinearLayout>
