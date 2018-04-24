@@ -5,6 +5,9 @@ package teamc.finalproject;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirebaseUtils {
 
     public static FirebaseDatabase DB = FirebaseDatabase.getInstance();
@@ -30,6 +33,13 @@ public class FirebaseUtils {
     public static void createUser(String username) {
         DatabaseReference userRef = usersRef.child(username);
         userRef.child("score").setValue(0);
+    }
+
+    public static List<Word> getNewWordList() {
+        Word tree = new Word("tree", "arbol");
+        ArrayList<Word> wordList = new ArrayList<>();
+        wordList.add(tree);
+        return wordList;
     }
 
     public static void createGame(Game game) {

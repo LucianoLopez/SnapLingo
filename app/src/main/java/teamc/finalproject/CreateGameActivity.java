@@ -14,20 +14,13 @@ public class CreateGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create the game
         creator = "andrew";
-        FirebaseUtils.createUser(creator);
+        int joinID = FirebaseUtils.getNewGameID();
 
-        Game game = playerCreateGame();
+        Game game = new Game(creator, joinID);
 
-        String newPlayer = "luciano";
-        FirebaseUtils.createUser("luciano");
-        FirebaseUtils.playerJoinGame("luciano", 314);
-    }
+        // Push the game to the database
 
-    private Game playerCreateGame() {
-        int id = FirebaseUtils.getNewGameID();
-        Game game = new Game(creator, "Game 1", id);
-        FirebaseUtils.createGame(game);
-        return game;
     }
 }

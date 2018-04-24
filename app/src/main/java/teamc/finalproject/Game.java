@@ -9,20 +9,20 @@ import java.util.Map;
 
 public class Game {
 
+    private String creator;
     private int joinID;
     private List<String> playerList;
     private Map<String, Integer> scores;
-    private String name;
 
-    public Game(String creator, String customName, int joinID) {
+    public Game(String creator, int joinID) {
+        this.creator = creator;
+        this.joinID = joinID;
+
         playerList = new ArrayList<>();
         playerList.add(creator);
 
         scores = new HashMap<>();
         setPlayerScore(creator, 0);
-
-        customName = name;
-        this.joinID = joinID;
     }
 
     public int getJoinID() {
@@ -35,10 +35,6 @@ public class Game {
 
     public void setPlayerScore(String username, int score) {
         scores.put(username, score);
-    }
-
-    public String getName() {
-        return name;
     }
 
 }
