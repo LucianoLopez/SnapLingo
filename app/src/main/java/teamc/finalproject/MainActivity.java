@@ -22,6 +22,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -62,6 +63,8 @@ import java.util.Locale;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String DETECTION_LABELS = "teamc.finalproject.DETECTION_LABELS";
+
     private static final String TAG = "Storage#MainActivity";
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -75,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseFirestore mFirestore;
 
     private Uri mDownloadUrl = null;
-    private Uri mFileUri = null;
+    private Uri mImageUri = null;
+    private Bitmap mPhotoBitmap;
     private String mResponse;
 
     @Override
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Restore instance state
         if (savedInstanceState != null) {
-            mFileUri = savedInstanceState.getParcelable(KEY_FILE_URI);
+            mImageUri = savedInstanceState.getParcelable(KEY_FILE_URI);
             mDownloadUrl = savedInstanceState.getParcelable(KEY_DOWNLOAD_URL);
         }
         onNewIntent(getIntent());
@@ -165,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSaveInstanceState(Bundle out) {
         super.onSaveInstanceState(out);
-        out.putParcelable(KEY_FILE_URI, mFileUri);
+        out.putParcelable(KEY_FILE_URI, mImageUri);
         out.putParcelable(KEY_DOWNLOAD_URL, mDownloadUrl);
     }
 
@@ -174,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if (resultCode == RESULT_OK) {
-                if (mFileUri != null) {
-                    uploadFromUri(mFileUri);
+                if (mImageUri != null) {
+                    uploadFromUri(mImageUri);
                 } else {
                     Log.w(TAG, "File URI is null");
                 }
@@ -186,11 +190,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+//    public static Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+//        InputStream input = this.getContentResolver().openInputStream(uri);
+//
+//        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+//        onlyBoundsOptions.inJustDecodeBounds = true;
+//        onlyBoundsOptions.inDither=true;//optional
+//        onlyBoundsOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;//optional
+//        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+//        input.close();
+//
+//        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+//            return null;
+//        }
+//
+//        int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight : onlyBoundsOptions.outWidth;
+//
+//        double ratio = (originalSize > THUMBNAIL_SIZE) ? (originalSize / THUMBNAIL_SIZE) : 1.0;
+//
+//        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+//        bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio);
+//        bitmapOptions.inDither = true; //optional
+//        bitmapOptions.inPreferredConfig=Bitmap.Config.ARGB_8888;//
+//        input = this.getContentResolver().openInputStream(uri);
+//        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+//        input.close();
+//        return bitmap;
+//    }
+//
+//    private static int getPowerOfTwoForSampleRatio(double ratio){
+//        int k = Integer.highestOneBit((int)Math.floor(ratio));
+//        if(k==0) return 1;
+//        else return k;
+//    }
+
     private void uploadFromUri(Uri fileUri) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
         // Save the File URI
-        mFileUri = fileUri;
+        mImageUri = fileUri;
 
         // Clear the last download, if any
         updateUI(mAuth.getCurrentUser());
@@ -208,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void beginDownload() {
         // Get path
-        String path = "photos/" + mFileUri.getLastPathSegment();
+        String path = "photos/" + mImageUri.getLastPathSegment();
 
         // Kick off MyDownloadService to download the file
         Intent intent = new Intent(this, MyDownloadService.class)
@@ -238,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
-                mFileUri = photoURI;
+                mImageUri = photoURI;
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
@@ -279,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void retrieveMetadata () {
 
-        DocumentReference docRef = mFirestore.collection("images").document(mFileUri.getLastPathSegment());
+        DocumentReference docRef = mFirestore.collection("images").document(mImageUri.getLastPathSegment());
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -304,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onUploadResultIntent(Intent intent) {
         // Got a new intent from MyUploadService with a success or failure
         mDownloadUrl = intent.getParcelableExtra(MyUploadService.EXTRA_DOWNLOAD_URL);
-        mFileUri = intent.getParcelableExtra(MyUploadService.EXTRA_FILE_URI);
+        mImageUri = intent.getParcelableExtra(MyUploadService.EXTRA_FILE_URI);
 
         updateUI(mAuth.getCurrentUser());
     }
@@ -333,19 +371,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mResponse != null) {
             // Manually filter the proto message to the label descriptions
             ArrayList<String> labels = new ArrayList<String>();
-            String labelstr = "";
+            String labelStr = "";
             for (String it : mResponse.split(",")) {
                 if (it.split(":")[0].contains("description")) {
                     labels.add(it.split(":")[1]);
-                    labelstr += it.split(":")[1] + " / ";
+                    labelStr += it.split(":")[1] + " / ";
                 }
             }
 
-            // Remove trailing slash
-            labelstr = labelstr.substring(0, labelstr.length() - 2);
-            Log.d(TAG,"Found: " + labels.size() + " labels.");
-            ((TextView) findViewById(R.id.response_data))
-                    .setText(labelstr);
+            if (labelStr.length() > 2) {
+                // Remove trailing slash
+                labelStr = labelStr.substring(0, labelStr.length() - 2);
+                Log.d(TAG,"Found: " + labels.size() + " labels.");
+                ((TextView) findViewById(R.id.response_data))
+                        .setText(labelStr);
+                Intent intent = new Intent(this, VerificationActivity.class);
+                intent.putExtra(DETECTION_LABELS, labelStr);
+                intent.putExtra("imageUri", mImageUri.toString());
+                startActivity(intent);
+            }
         }
     }
 

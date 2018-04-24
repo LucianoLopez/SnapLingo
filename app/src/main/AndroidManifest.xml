@@ -4,7 +4,9 @@
 
     <!-- Used only for testing purposes, not required for Firebase Storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -25,8 +27,7 @@
 
         <service
             android:name=".MyDownloadService"
-            android:exported="false"/>
-
+            android:exported="false" />
         <service
             android:name=".MyUploadService"
             android:exported="false" />
@@ -38,9 +39,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".VerificationActivity"></activity>
     </application>
 
 </manifest>
