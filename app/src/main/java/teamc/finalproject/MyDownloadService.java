@@ -159,8 +159,8 @@ public class MyDownloadService extends MyBaseTaskService {
         // Hide the progress notification
         dismissProgressNotification();
 
-        // Make Intent to MainActivity
-        Intent intent = new Intent(this, MainActivity.class)
+        // Make Intent to CameraActivity
+        Intent intent = new Intent(this, CameraActivity.class)
                 .putExtra(EXTRA_DOWNLOAD_PATH, downloadPath)
                 .putExtra(EXTRA_BYTES_DOWNLOADED, bytesDownloaded)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

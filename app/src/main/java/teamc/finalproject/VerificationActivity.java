@@ -23,7 +23,7 @@ public class VerificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verification);
 
         Intent intent = getIntent();
-        String labelStr = intent.getStringExtra(MainActivity.DETECTION_LABELS);
+        String labelStr = intent.getStringExtra(CameraActivity.DETECTION_LABELS);
         Uri imageUri = Uri.parse(intent.getStringExtra("imageUri"));
         try {
             mPhotoBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
