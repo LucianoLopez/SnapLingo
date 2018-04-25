@@ -15,8 +15,14 @@
       },
       "oauth_client": [
         {
-<<<<<<< HEAD
-=======
+          "client_id": "170538969558-mrer0r3f2et4amklkdd7k839h3uucha2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teamc.finalproject",
+            "certificate_hash": "2e061904ff1f659023193cbfac7ff78678d27622"
+          }
+        },
+        {
           "client_id": "170538969558-vpp5d3n8el2vaar0s20idue1do40v6jq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -25,7 +31,6 @@
           }
         },
         {
->>>>>>> e896b1edd743f3ab28b115db98bd75d3988bdf02
           "client_id": "170538969558-90j0odge4q6s7c3sv3tqgtj7u9q3uhl8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,10 +45,6 @@
           "status": 1
         },
         "appinvite_service": {
-<<<<<<< HEAD
-          "status": 1,
-          "other_platform_oauth_client": []
-=======
           "status": 2,
           "other_platform_oauth_client": [
             {
@@ -51,7 +52,6 @@
               "client_type": 3
             }
           ]
->>>>>>> e896b1edd743f3ab28b115db98bd75d3988bdf02
         },
         "ads_service": {
           "status": 2
