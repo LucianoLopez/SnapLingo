@@ -1,6 +1,7 @@
 package teamc.finalproject.RecyclerViewWords;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import teamc.finalproject.VerificationActivity;
 import teamc.finalproject.R;
 import teamc.finalproject.Word;
 
@@ -29,6 +31,13 @@ public class WordsAdapter extends RecyclerView.Adapter<WordViewHolder> {
     @Override
     public void onBindViewHolder(final WordViewHolder holder, int position) {
         holder.mWordTextView.setText(wordsList.get(position).getForeignTranslation());
+        holder.mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, VerificationActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
