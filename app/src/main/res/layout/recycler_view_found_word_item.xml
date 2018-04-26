@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_2"
-    android:paddingTop="@dimen/margin_2"
-    android:paddingBottom="@dimen/margin_2"
+    android:paddingTop="@dimen/word_list_item_vertical_padding"
+    android:paddingBottom="@dimen/word_list_item_vertical_padding"
     android:paddingLeft="16dp"
     android:paddingRight="32dp"
     android:background="@android:color/white">
