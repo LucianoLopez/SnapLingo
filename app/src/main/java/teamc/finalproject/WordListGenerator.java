@@ -17,20 +17,19 @@ import javax.net.ssl.HttpsURLConnection;
 public class WordListGenerator {
 
     /**
-     * Currently, only creates word pairs of [English object, Spanish translation].
-     * TODO Test out the Spanish translation API and make an array of word pairs
+     * Creates a Hashmap of N wordpairs {English -> Spanish}
      */
     String[] words = new String[2];
     ObjectTask ot = null;
     SpanishTranslationTask stt = null;
     private final String URI = "http://roger.redevised.com/api/v1";
 
-    public HashMap<String, String> getWordList() {
+    public HashMap<String, String> getWordList(int size) {
         ot = new ObjectTask();
         stt = new SpanishTranslationTask();
         HashMap<String, String> wordList = new HashMap<>();
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < size; i++) {
                 executeWordPair(ot, stt);
                 if (words[1] == null || wordList.containsKey(words[0])) {
                     i -= 1;
