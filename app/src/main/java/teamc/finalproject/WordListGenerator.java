@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -20,18 +21,45 @@ public class WordListGenerator {
      * TODO Test out the Spanish translation API and make an array of word pairs
      */
     String[] words = new String[2];
+    ObjectTask ot = null;
+    SpanishTranslationTask stt = null;
     private final String URI = "http://roger.redevised.com/api/v1";
 
-    public String[] getWordList() {
-        ObjectTask cbt = new ObjectTask();
-        cbt.execute(URI);
-        String word = cbt.result;
-        words[0] = word;
-        SpanishTranslationTask stt = new SpanishTranslationTask();
-        String params = translations(word);
-        stt.execute(params);
-        words[1] = stt.result;
-        return words;
+    public HashMap<String, String> getWordList() {
+        ot = new ObjectTask();
+        stt = new SpanishTranslationTask();
+        HashMap<String, String> wordList = new HashMap<>();
+        try {
+            for (int i = 0; i < 10; i++) {
+                executeWordPair(ot, stt);
+                if (words[1] == null || wordList.containsKey(words[0])) {
+                    i -= 1;
+                    continue;
+                }
+                wordList.put(words[0], words[1]);
+                words = new String[2];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return wordList;
+    }
+    void executeWordPair(ObjectTask ot, SpanishTranslationTask stt) {
+        ot = new ObjectTask();
+        stt = new SpanishTranslationTask();
+        try {
+            getObject(ot);
+            getTranslation(stt);
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    void getObject(ObjectTask ot) throws Exception {
+        ot.execute(URI).get();
+    }
+    void getTranslation(SpanishTranslationTask stt) throws Exception {
+        stt.execute(translations(words[0])).get();
     }
     /**
      Used to set parameters for the Oxford language Translation API
@@ -68,9 +96,12 @@ public class WordListGenerator {
                     result.append(line);
                 }
                 rd.close();
-                return result.toString();
+                String word = result.toString();
+                words[0] = word;
+                conn.disconnect();
+                return word;
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 return "You fuuuucked up";
             }
 
@@ -79,7 +110,11 @@ public class WordListGenerator {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             this.result = result;
-            System.out.println(result);
+            words[0] = result;
+//            SpanishTranslationTask stt = new SpanishTranslationTask();
+//            String params = translations(result);
+//            stt.execute(params);
+//            System.out.println(result);
         }
 
     }
@@ -112,31 +147,35 @@ public class WordListGenerator {
                 while ((current = rd.read()) != -1) {
                     result.write((byte) current);
                 }
+                urlConnection.disconnect();
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
             try {
                 JSONObject jOBject = new JSONObject(result.toString());
                 JSONArray results = jOBject.getJSONArray("results");
-                JSONObject lexicalEntries = results.getJSONObject(0);
-                JSONArray entries = lexicalEntries.getJSONArray("entries");
-                JSONArray senses = entries.getJSONObject(0).getJSONArray("senses");
-                JSONArray examples = senses.getJSONObject(0).getJSONArray("examples");
-                JSONArray translations = examples.getJSONObject(0).getJSONArray("translations");
+                JSONArray lexicalEntries = results.getJSONObject(0).getJSONArray("lexicalEntries");
+                JSONArray entries = lexicalEntries.getJSONObject(0).getJSONArray("entries");
+                JSONObject test = entries.getJSONObject(0);
+                JSONArray senses = test.getJSONArray("senses");
+//                JSONArray examples = senses.getJSONObject(0).getJSONArray("examples");
+                JSONArray translations = senses.getJSONObject(0).getJSONArray("translations");
                 word = translations.getJSONObject(0).getString("text");
 
 //                JSONArray jArray = new JSONArray(result.toString());
 
 //                JSONObject jObject =
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
+            words[1] = word;
             return word;
         }
         @Override
         protected void onPostExecute(String results) {
             super.onPostExecute(results);
             this.result = results;
+            words[1] = results;
         }
     }
 }
