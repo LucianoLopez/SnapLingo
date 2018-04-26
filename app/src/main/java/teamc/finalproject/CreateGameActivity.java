@@ -28,7 +28,9 @@ public class CreateGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.create_game_layout);
+
 
         // Create the game
         creatorUID = getIntent().getIntExtra("userUID", 0);
