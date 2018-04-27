@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -22,16 +23,19 @@ public class WordListGenerator {
     String[] words = new String[2];
     private final String URI = "http://roger.redevised.com/api/v1";
 
-    public HashMap<String, String> getWordList(int size) {
-        HashMap<String, String> wordList = new HashMap<>();
+    public ArrayList<Word> getWordList(int size) {
+        HashMap<String, String> lwords = new HashMap<>();
+        ArrayList<Word> wordList = new ArrayList<>();
         try {
             for (int i = 0; i < size; i++) {
                 executeWordPair();
-                if (words[1] == null || wordList.containsKey(words[0])) {
+                if (words[1] == null || lwords.containsKey(words[0])) {
                     i -= 1;
                     continue;
                 }
-                wordList.put(words[0], words[1]);
+                Word input = new Word(words[0], words[1]);
+                wordList.add(input);
+                lwords.put(words[0], words[1]);
                 words = new String[2];
             }
         } catch (Exception e) {

@@ -2,17 +2,11 @@ package teamc.finalproject;
 
 // Created by Andrew
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class FirebaseUtils {
 
@@ -50,7 +44,9 @@ public class FirebaseUtils {
     }
 
     public static List<Word> getNewWordList() {
-        return Word.getDummyData();
+        WordListGenerator wlg = new WordListGenerator();
+        List<Word> wordList = wlg.getWordList(10);
+        return wordList;
     }
 
     public static void createGame(Game game) {
