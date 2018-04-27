@@ -18,7 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class WordListGenerator {
 
     /**
-     * Creates a Hashmap of N wordpairs {English -> Spanish}
+     * Use this to get an ArrayList of Word Objects
      */
     String[] words = new String[2];
     private final String URI = "http://roger.redevised.com/api/v1";
@@ -43,7 +43,7 @@ public class WordListGenerator {
         }
         return wordList;
     }
-    void executeWordPair() {
+    private void executeWordPair() {
         ObjectTask ot = new ObjectTask();
         SpanishTranslationTask stt = new SpanishTranslationTask();
         try {
@@ -54,10 +54,10 @@ public class WordListGenerator {
         }
     }
 
-    void getObject(ObjectTask ot) throws Exception {
+    private void getObject(ObjectTask ot) throws Exception {
         ot.execute(URI).get();
     }
-    void getTranslation(SpanishTranslationTask stt) throws Exception {
+    private void getTranslation(SpanishTranslationTask stt) throws Exception {
         stt.execute(translations(words[0])).get();
     }
     /**
@@ -127,6 +127,8 @@ public class WordListGenerator {
         @Override
         protected String doInBackground(String... params) {
             ByteArrayOutputStream result = new ByteArrayOutputStream(50);
+            StringBuilder results1 = new StringBuilder();
+            //used to be outputByteArray
             String word = null;
             try {
                 URL url = new URL(params[0]);
@@ -134,17 +136,19 @@ public class WordListGenerator {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestProperty("app_id", APP_ID);
                 urlConnection.setRequestProperty("app_key", APP_KEY);
+
                 BufferedReader rd = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                int current = 0;
-                while ((current = rd.read()) != -1) {
-                    result.write((byte) current);
+                String current = null;
+                while ((current = rd.readLine()) != null) {
+//                    result.write((byte) current);
+                    results1.append(current);
                 }
                 urlConnection.disconnect();
             } catch (Exception e) {
 //                e.printStackTrace();
             }
             try {
-                JSONObject jOBject = new JSONObject(result.toString());
+                JSONObject jOBject = new JSONObject(results1.toString());
                 JSONArray results = jOBject.getJSONArray("results");
                 JSONArray lexicalEntries = results.getJSONObject(0).getJSONArray("lexicalEntries");
                 JSONArray entries = lexicalEntries.getJSONObject(0).getJSONArray("entries");
