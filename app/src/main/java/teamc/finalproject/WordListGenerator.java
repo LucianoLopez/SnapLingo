@@ -20,17 +20,13 @@ public class WordListGenerator {
      * Creates a Hashmap of N wordpairs {English -> Spanish}
      */
     String[] words = new String[2];
-    ObjectTask ot = null;
-    SpanishTranslationTask stt = null;
     private final String URI = "http://roger.redevised.com/api/v1";
 
     public HashMap<String, String> getWordList(int size) {
-        ot = new ObjectTask();
-        stt = new SpanishTranslationTask();
         HashMap<String, String> wordList = new HashMap<>();
         try {
             for (int i = 0; i < size; i++) {
-                executeWordPair(ot, stt);
+                executeWordPair();
                 if (words[1] == null || wordList.containsKey(words[0])) {
                     i -= 1;
                     continue;
@@ -43,9 +39,9 @@ public class WordListGenerator {
         }
         return wordList;
     }
-    void executeWordPair(ObjectTask ot, SpanishTranslationTask stt) {
-        ot = new ObjectTask();
-        stt = new SpanishTranslationTask();
+    void executeWordPair() {
+        ObjectTask ot = new ObjectTask();
+        SpanishTranslationTask stt = new SpanishTranslationTask();
         try {
             getObject(ot);
             getTranslation(stt);
@@ -110,21 +106,14 @@ public class WordListGenerator {
             super.onPostExecute(result);
             this.result = result;
             words[0] = result;
-//            SpanishTranslationTask stt = new SpanishTranslationTask();
-//            String params = translations(result);
-//            stt.execute(params);
-//            System.out.println(result);
         }
 
     }
 
     /**
-     * FIXME Most likely doesn't work (Have yet to debug)
-     * Returns the Spanish equivalent of an English word.
-     *
-     * Connects to the Oxford Dictionary language translator.
+     * Returns the Spanish equivalent of an English word from the Oxford Dictionary language
+     * translator.
      * https://developer.oxforddictionaries.com/documentation
-     *
      */
     private class SpanishTranslationTask extends AsyncTask<String, Integer, String> {
 
@@ -155,15 +144,10 @@ public class WordListGenerator {
                 JSONArray results = jOBject.getJSONArray("results");
                 JSONArray lexicalEntries = results.getJSONObject(0).getJSONArray("lexicalEntries");
                 JSONArray entries = lexicalEntries.getJSONObject(0).getJSONArray("entries");
-                JSONObject test = entries.getJSONObject(0);
-                JSONArray senses = test.getJSONArray("senses");
-//                JSONArray examples = senses.getJSONObject(0).getJSONArray("examples");
+                JSONArray senses = entries.getJSONObject(0).getJSONArray("senses");
                 JSONArray translations = senses.getJSONObject(0).getJSONArray("translations");
                 word = translations.getJSONObject(0).getString("text");
 
-//                JSONArray jArray = new JSONArray(result.toString());
-
-//                JSONObject jObject =
             } catch (Exception e) {
 //                e.printStackTrace();
             }
