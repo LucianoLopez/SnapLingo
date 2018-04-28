@@ -10,28 +10,40 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Login" />
+        android:text="@string/login" />
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter Username Here"
-        android:inputType="textPersonName" />
+        android:hint="@string/login_hint"
+        />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter Password Here"
-        android:inputType="textPersonName" />
+        android:hint="@string/password_hint"
+        />
 
     <Button
-        android:id="@+id/startButton"
+        android:id="@+id/signinButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:text="@string/signin" />
+
+    <Button
+        android:id="@+id/createaccountButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/createaccount" />
+
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status" />
 
 </LinearLayout>
