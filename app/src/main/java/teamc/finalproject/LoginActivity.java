@@ -92,10 +92,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             updateUI(null);
 
                         }
-
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -125,12 +121,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText(R.string.auth_failed);
                         }
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
         // [END sign_in_with_email]
@@ -193,7 +186,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mProgressDialog.dismiss();
         }
     }
-
-
-
 }
