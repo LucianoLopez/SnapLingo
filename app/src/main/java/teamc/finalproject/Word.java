@@ -1,6 +1,8 @@
 package teamc.finalproject;
 
-public class Word {
+import java.io.Serializable;
+
+public class Word implements Serializable {
     private String englishTranslation;
     private String foreignTranslation;
     private int numFound;

@@ -62,7 +62,7 @@ public class WordsFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static WordsFragment newInstance() {
         WordsFragment fragment = new WordsFragment();
-        mGameId = "5961";
+        mGameId = "1579";
         mUserId = "123456";
 
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();

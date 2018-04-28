@@ -27,24 +27,30 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentListenOptions;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +81,15 @@ public class VerificationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
+    private CardView verificationCardView;
+    private ConstraintLayout header;
+    private TextView feedbackTextView;
+    private FloatingActionButton actionButton;
+    private TextView wordTitle;
+    private TextView translationTextView;
+    private ImageView photoImageView;
+
+    private Word mWord;
     private Uri mDownloadUrl = null;
     private Uri mImageUri = null;
     private String mResponse;
@@ -87,6 +102,20 @@ public class VerificationActivity extends AppCompatActivity {
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
+
+        Intent intent = getIntent();
+        mWord = (Word) intent.getSerializableExtra("word");
+
+        verificationCardView = findViewById(R.id.verificationCardView);
+        header = findViewById(R.id.header);
+        feedbackTextView = findViewById(R.id.feedbackTextView);
+        actionButton = findViewById(R.id.actionButton);
+        wordTitle = findViewById(R.id.titleTextView);
+        translationTextView = findViewById(R.id.translationTextView);
+        photoImageView = findViewById(R.id.photoImageView);
+
+        verificationCardView.setVisibility(View.GONE);
+        translationTextView.setVisibility(View.GONE);
 
         // Restore instance state
         if (savedInstanceState != null) {
@@ -123,7 +152,6 @@ public class VerificationActivity extends AppCompatActivity {
                                 intent.getStringExtra(MyDownloadService.EXTRA_DOWNLOAD_PATH)));
                         break;
                     case MyUploadService.UPLOAD_COMPLETED:
-                        retrieveMetadata();
                     case MyUploadService.UPLOAD_ERROR:
                         onUploadResultIntent(intent);
                         break;
@@ -211,6 +239,8 @@ public class VerificationActivity extends AppCompatActivity {
 
         // Show loading spinner
         showProgressDialog(getString(R.string.progress_uploading));
+        retrieveMetadata();
+
     }
 
     private void beginDownload() {
@@ -262,27 +292,32 @@ public class VerificationActivity extends AppCompatActivity {
         return image;
     }
 
-    private void retrieveMetadata () {
+    private void retrieveMetadata() {
 
         showProgressDialog("Processing Image...");
         DocumentReference docRef = mFirestore.collection("images").document(mImageUri.getLastPathSegment());
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        // Listen for metadata changes to the document.
+        DocumentListenOptions options = new DocumentListenOptions()
+                .includeMetadataChanges();
+
+        docRef.addSnapshotListener(options, new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + task.getResult().getData());
-                        mResponse = ("" +  task.getResult().getData()).replaceAll("=", ":");
-                    } else {
-                        Log.d(TAG, "No such document");
-                        mResponse = "No stored label data";
-                    }
-                    updateUI(mAuth.getCurrentUser());
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
                 }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "DocumentSnapshot data: " + snapshot.getData());
+                    mResponse = ("" +  snapshot.getData()).replaceAll("=", ":");
+                } else {
+                    Log.d(TAG, "Current data: null");
+                    mResponse = null;
+                }
+                updateUI(mAuth.getCurrentUser());
             }
         });
     }
@@ -300,23 +335,41 @@ public class VerificationActivity extends AppCompatActivity {
             hideProgressDialog();
             // Manually filter the proto message to the label descriptions
             ArrayList<String> labels = new ArrayList<String>();
-            String labelStr = "";
             for (String it : mResponse.split(",")) {
                 if (it.split(":")[0].contains("description")) {
                     labels.add(it.split(":")[1]);
-                    labelStr += it.split(":")[1] + " / ";
                 }
             }
 
-            Log.d(TAG, labelStr);
+            wordTitle.setText(mWord.getForeignTranslation());
+            photoImageView.setImageBitmap(mPhotoBitmap);
 
-            if (labelStr.length() > 2) {
-                // Remove trailing slash
-                labelStr = labelStr.substring(0, labelStr.length() - 2);
-                Log.d(TAG,"Found: " + labels.size() + " labels.");
-                ImageView photoImageView = findViewById(R.id.photoImageView);
-                photoImageView.setImageBitmap(mPhotoBitmap);
+            Log.d("response", mResponse.toString());
+            Log.d("detection labels", labels.toString());
+
+            if (labels.contains(mWord.getEnglishTranslation())) {
+                feedbackTextView.setText(getResources().getString(R.string.verification_correct));
+                translationTextView.setVisibility(View.VISIBLE);
+                translationTextView.setText(mWord.getEnglishTranslation());
+                actionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+            } else {
+                feedbackTextView.setText(getResources().getString(R.string.verification_incorrect));
+                header.setBackgroundColor(getResources().getColor(R.color.verificationIncorrect));
+                actionButton.setImageResource(R.drawable.ic_close_white_24dp);
+                actionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        launchCamera();
+                    }
+                });
             }
+
+            verificationCardView.setVisibility(View.VISIBLE);
         }
     }
 
