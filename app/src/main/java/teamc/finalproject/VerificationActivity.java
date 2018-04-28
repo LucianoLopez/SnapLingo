@@ -359,7 +359,7 @@ public class VerificationActivity extends AppCompatActivity {
                 });
             } else {
                 feedbackTextView.setText(getResources().getString(R.string.verification_incorrect));
-                header.setBackgroundColor(getResources().getColor(R.color.verificationIncorrect));
+                header.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_round_incorrect));
                 actionButton.setImageResource(R.drawable.ic_close_white_24dp);
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
