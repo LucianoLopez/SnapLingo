@@ -351,6 +351,7 @@ public class VerificationActivity extends AppCompatActivity {
                 feedbackTextView.setText(getResources().getString(R.string.verification_correct));
                 translationTextView.setVisibility(View.VISIBLE);
                 translationTextView.setText(mWord.getEnglishTranslation());
+                header.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_round));
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -369,6 +370,7 @@ public class VerificationActivity extends AppCompatActivity {
                 });
             }
 
+            mResponse = null;
             verificationCardView.setVisibility(View.VISIBLE);
         }
     }
