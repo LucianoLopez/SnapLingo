@@ -332,7 +332,6 @@ public class VerificationActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (mResponse != null) {
-            hideProgressDialog();
             // Manually filter the proto message to the label descriptions
             ArrayList<String> labels = new ArrayList<String>();
             for (String it : mResponse.split(",")) {
@@ -358,6 +357,7 @@ public class VerificationActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+                int newPoints = updateWordsFoundAndPoints(mWord);
             } else {
                 feedbackTextView.setText(getResources().getString(R.string.verification_incorrect));
                 header.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_round_incorrect));
@@ -370,9 +370,14 @@ public class VerificationActivity extends AppCompatActivity {
                 });
             }
 
+            hideProgressDialog();
             mResponse = null;
             verificationCardView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private int updateWordsFoundAndPoints(Word word) {
+        // TODO add word to words_found in DB and update user points
     }
 
     private void showMessageDialog(String title, String message) {
