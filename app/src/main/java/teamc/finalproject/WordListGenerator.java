@@ -10,28 +10,55 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class WordListGenerator {
 
     /**
-     * Currently, only creates word pairs of [English object, Spanish translation].
-     * TODO Test out the Spanish translation API and make an array of word pairs
+     * Use this to get an ArrayList of Word Objects
      */
     String[] words = new String[2];
     private final String URI = "http://roger.redevised.com/api/v1";
 
-    public String[] getWordList() {
-        ObjectTask cbt = new ObjectTask();
-        cbt.execute(URI);
-        String word = cbt.result;
-        words[0] = word;
+    public ArrayList<Word> getWordList(int size) {
+        HashMap<String, String> lwords = new HashMap<>();
+        ArrayList<Word> wordList = new ArrayList<>();
+        try {
+            for (int i = 0; i < size; i++) {
+                executeWordPair();
+                if (words[1] == null || lwords.containsKey(words[0])) {
+                    i -= 1;
+                    continue;
+                }
+                Word input = new Word(words[0], words[1]);
+                wordList.add(input);
+                lwords.put(words[0], words[1]);
+                words = new String[2];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return wordList;
+    }
+    private void executeWordPair() {
+        ObjectTask ot = new ObjectTask();
         SpanishTranslationTask stt = new SpanishTranslationTask();
-        String params = translations(word);
-        stt.execute(params);
-        words[1] = stt.result;
-        return words;
+        try {
+            getObject(ot);
+            getTranslation(stt);
+        } catch (Exception e) {
+            return;
+        }
+    }
+
+    private void getObject(ObjectTask ot) throws Exception {
+        ot.execute(URI).get();
+    }
+    private void getTranslation(SpanishTranslationTask stt) throws Exception {
+        stt.execute(translations(words[0])).get();
     }
     /**
      Used to set parameters for the Oxford language Translation API
@@ -68,9 +95,12 @@ public class WordListGenerator {
                     result.append(line);
                 }
                 rd.close();
-                return result.toString();
+                String word = result.toString();
+                words[0] = word;
+                conn.disconnect();
+                return word;
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 return "You fuuuucked up";
             }
 
@@ -79,18 +109,15 @@ public class WordListGenerator {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             this.result = result;
-            System.out.println(result);
+            words[0] = result;
         }
 
     }
 
     /**
-     * FIXME Most likely doesn't work (Have yet to debug)
-     * Returns the Spanish equivalent of an English word.
-     *
-     * Connects to the Oxford Dictionary language translator.
+     * Returns the Spanish equivalent of an English word from the Oxford Dictionary language
+     * translator.
      * https://developer.oxforddictionaries.com/documentation
-     *
      */
     private class SpanishTranslationTask extends AsyncTask<String, Integer, String> {
 
@@ -100,6 +127,8 @@ public class WordListGenerator {
         @Override
         protected String doInBackground(String... params) {
             ByteArrayOutputStream result = new ByteArrayOutputStream(50);
+            StringBuilder results1 = new StringBuilder();
+            //used to be outputByteArray
             String word = null;
             try {
                 URL url = new URL(params[0]);
@@ -107,36 +136,37 @@ public class WordListGenerator {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestProperty("app_id", APP_ID);
                 urlConnection.setRequestProperty("app_key", APP_KEY);
+
                 BufferedReader rd = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                int current = 0;
-                while ((current = rd.read()) != -1) {
-                    result.write((byte) current);
+                String current = null;
+                while ((current = rd.readLine()) != null) {
+//                    result.write((byte) current);
+                    results1.append(current);
                 }
+                urlConnection.disconnect();
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
             try {
-                JSONObject jOBject = new JSONObject(result.toString());
+                JSONObject jOBject = new JSONObject(results1.toString());
                 JSONArray results = jOBject.getJSONArray("results");
-                JSONObject lexicalEntries = results.getJSONObject(0);
-                JSONArray entries = lexicalEntries.getJSONArray("entries");
+                JSONArray lexicalEntries = results.getJSONObject(0).getJSONArray("lexicalEntries");
+                JSONArray entries = lexicalEntries.getJSONObject(0).getJSONArray("entries");
                 JSONArray senses = entries.getJSONObject(0).getJSONArray("senses");
-                JSONArray examples = senses.getJSONObject(0).getJSONArray("examples");
-                JSONArray translations = examples.getJSONObject(0).getJSONArray("translations");
+                JSONArray translations = senses.getJSONObject(0).getJSONArray("translations");
                 word = translations.getJSONObject(0).getString("text");
 
-//                JSONArray jArray = new JSONArray(result.toString());
-
-//                JSONObject jObject =
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
+            words[1] = word;
             return word;
         }
         @Override
         protected void onPostExecute(String results) {
             super.onPostExecute(results);
             this.result = results;
+            words[1] = results;
         }
     }
 }

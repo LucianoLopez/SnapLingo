@@ -19,7 +19,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".VerificationActivity">
         </activity>
-        <activity android:name=".CreateGameActivity"></activity>
+
+        <activity android:name=".CreateOrJoinActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateGameActivity"
+            android:label="CreateGameActivity">
+        </activity>
 
         <service
             android:name=".MyDownloadService"
@@ -41,11 +52,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".JoinGameActivity">
+
         </activity>
     </application>
 

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import teamc.finalproject.fragment.ScoreboardFragment;
 import teamc.finalproject.fragment.WordsFragment;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private static int NUM_ITEMS = 2;
