@@ -9,17 +9,17 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import teamc.finalproject.VerificationActivity;
 import teamc.finalproject.R;
+import teamc.finalproject.VerificationActivity;
 import teamc.finalproject.Word;
 
 public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<Word> wordsList;
+    private List<Word> wordList;
     private int viewType;
     private Context context;
 
-    public WordsAdapter(List<Word> wordsList, int viewType, Context context){
-        this.wordsList = wordsList;
+    public WordsAdapter(List<Word> wordList, int viewType, Context context){
+        this.wordList = wordList;
         this.viewType = viewType;
         this.context = context;
     }
@@ -49,14 +49,16 @@ public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        final Word word = wordList.get(position);
         switch (holder.getItemViewType()) {
             case 0:
                 WordViewHolder wordViewHolder = (WordViewHolder) holder;
-                wordViewHolder.mWordTextView.setText(wordsList.get(position).getForeignTranslation());
+                wordViewHolder.mWordTextView.setText(word.getForeignTranslation());
                 wordViewHolder.mCameraButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(context, VerificationActivity.class);
+                        intent.putExtra("word", word);
                         context.startActivity(intent);
                     }
                 });
@@ -64,13 +66,13 @@ public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             case 1:
                 FoundWordViewHolder foundWordViewHolder = (FoundWordViewHolder) holder;
-                foundWordViewHolder.mWordTextView.setText(wordsList.get(position).getForeignTranslation());
+                foundWordViewHolder.mWordTextView.setText(word.getForeignTranslation());
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return this.wordsList.size();
+        return this.wordList.size();
     }
 }

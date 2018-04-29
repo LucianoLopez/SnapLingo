@@ -26,6 +26,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="verification_correct">NEW DISCOVERY!</string>
+    <string name="verification_incorrect">That doesn\'t seem to be correct...</string>
+    <string name="verification_correct_button">Back</string>
+    <string name="verification_incorrect_button">Retake photo</string>
     <string name="login">Login</string>
     <string name="login_hint">Enter Username Here</string>
     <string name="password">Password</string>

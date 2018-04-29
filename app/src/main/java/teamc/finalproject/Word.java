@@ -1,9 +1,12 @@
 package teamc.finalproject;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Word {
+public class Word implements Serializable {
+
     private String englishTranslation;
     private String foreignTranslation;
     private int numFound;
