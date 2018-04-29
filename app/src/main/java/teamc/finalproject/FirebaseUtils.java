@@ -52,7 +52,7 @@ public class FirebaseUtils {
     public static void createGame(Game game) {
         // Firebase only likes String dbref names
         String gameKey = Integer.toString(game.getJoinID());
-        String creatorKey = Integer.toString(game.getCreatorUID());
+        String creatorKey = game.getCreatorUID();
 
         // Put the game in the "games" section
         DatabaseReference gameRef = gamesRef.child(gameKey);
@@ -61,8 +61,8 @@ public class FirebaseUtils {
         DatabaseReference playerListRef = gameRef.child("player_list");
 
         DatabaseReference playerRef;
-        for (int playerUID : game.getPlayerList()) {
-            playerRef = playerListRef.child(Integer.toString(playerUID));
+        for (String playerUID : game.getPlayerList()) {
+            playerRef = playerListRef.child(playerUID);
             playerRef.child("points").setValue(game.getPlayerScore(playerUID));
         }
 
@@ -71,30 +71,25 @@ public class FirebaseUtils {
         userRef.child("game").setValue(game.getJoinID());
     }
 
-    public static void playerJoinGame(int playerUID, int gameID) {
+    public static void playerJoinGame(String playerUID, int gameID) {
         System.out.println("Attempting to add player " + playerUID + " to game " + gameID + ".");
 
         DatabaseReference gameRef = getGameRefFromID(gameID);
-        DatabaseReference newPlayerRefInGame = gameRef.child("player_list").child(Integer.toString(playerUID));
+        DatabaseReference newPlayerRefInGame = gameRef.child("player_list").child(playerUID);
         newPlayerRefInGame.child("points").setValue(0);
 
-        usersRef.child(Integer.toString(playerUID)).child("game").setValue(gameID);
+        usersRef.child(playerUID).child("game").setValue(gameID);
     }
 
-    public static void setWordsFound(int playerUID, int gameID, List<Word> words) {
+    public static void setWordsFound(String playerUID, int gameID, List<Word> words) {
         DatabaseReference gameRef = getGameRefFromID(gameID);
-        DatabaseReference playerRef = gameRef.child("player_list").child(Integer.toString(playerUID));
+        DatabaseReference playerRef = gameRef.child("player_list").child(playerUID);
         DatabaseReference wordsFoundRef = playerRef.child("words_found");
         wordsFoundRef.setValue(words);
     }
 
     public static DatabaseReference getGameRefFromID(int gameID) {
         return gamesRef.child(Integer.toString(gameID));
-    }
-
-    public static String getUsernameFromUID(int uid) {
-        DatabaseReference userRef = usersRef.child(Integer.toString(uid));
-        return "andrew";
     }
 
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,8 +22,6 @@ import java.util.List;
 
 public class CreateGameActivity extends AppCompatActivity {
 
-    private int creatorUID;
-
     private ArrayAdapter<String> adapter;
 
     @Override
@@ -31,9 +30,11 @@ public class CreateGameActivity extends AppCompatActivity {
 
         setContentView(R.layout.create_game_layout);
 
-
         // Create the game
-        creatorUID = getIntent().getIntExtra("userUID", 0);
+        final String creatorUID = getIntent().getStringExtra("uid");
+        final String username = getIntent().getStringExtra("username");
+
+        System.out.println("CreateGameActivity got extra uid " + creatorUID);
 
         Game game = new Game(creatorUID);
 
@@ -47,8 +48,8 @@ public class CreateGameActivity extends AppCompatActivity {
 
         final List<String> playerList = new ArrayList<>();
 
-        for (int playerID : game.getPlayerList()) {
-            playerList.add(Integer.toString(playerID));
+        for (String playerID : game.getPlayerList()) {
+            playerList.add(playerID);
         }
 
         final ListView playerListView = findViewById(R.id.playerListView);
@@ -95,6 +96,14 @@ public class CreateGameActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        Button startButton = findViewById(R.id.startGameButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start game
             }
         });
 

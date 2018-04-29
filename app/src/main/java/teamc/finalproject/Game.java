@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class Game {
 
-    private int creatorUID;
+    private String creatorUID;
     private int joinID;
-    private Map<Integer, Integer> scores; // Acts as the player list
+    private Map<String, Integer> scores; // Acts as the player list
     private List<Word> wordList;
 
-    public Game(int creatorUID, int joinID, List<Word> wordList) {
+    public Game(String creatorUID, int joinID, List<Word> wordList) {
         this.creatorUID = creatorUID;
         this.joinID = joinID;
         this.wordList = wordList;
@@ -23,20 +23,20 @@ public class Game {
         // setPlayerScore(creatorUID, 0);
     }
 
-    public Game(int creatorUID) {
+    public Game(String creatorUID) {
         this(creatorUID, FirebaseUtils.getNewGameID(), FirebaseUtils.getNewWordList());
     }
 
-    public void givePlayerPoints(int playerUID, int points) {
+    public void givePlayerPoints(String playerUID, int points) {
         int newPlayerScore = scores.get(playerUID) + points;
         setPlayerScore(playerUID, newPlayerScore);
     }
 
-    public void setPlayerScore(int playerUID, int score) {
+    public void setPlayerScore(String playerUID, int score) {
         scores.put(playerUID, score);
     }
 
-    public void playerJoinGame(int playerUID) {
+    public void playerJoinGame(String playerUID) {
         setPlayerScore(playerUID, 0);
     }
 
@@ -46,11 +46,11 @@ public class Game {
         return joinID;
     }
 
-    public List<Integer> getPlayerList() {
+    public List<String> getPlayerList() {
         return new ArrayList<>(scores.keySet());
     }
 
-    public int getCreatorUID() {
+    public String getCreatorUID() {
         return creatorUID;
     }
 
@@ -58,7 +58,7 @@ public class Game {
         return this.wordList;
     }
 
-    public int getPlayerScore(int playerUID) {
+    public int getPlayerScore(String playerUID) {
         return scores.get(playerUID);
     }
 

@@ -2,6 +2,7 @@ package teamc.finalproject;
 
 // Created by Will
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -158,10 +159,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         hideProgressDialog();
         if (user != null) {
             // Login Success
-            // TODO
-            // Intent goToSecondActivityIntent = new Intent(FirstActivity.this, SecondActivity.class);
-            // FirstActivity.this.startActivity(SecondActivity);
-            // goToSecondActivityIntent.putExtra("user", user);
+
+            Intent goToCreateOrJoin = new Intent(LoginActivity.this, CreateOrJoinActivity.class);
+            goToCreateOrJoin.putExtra("username", user.getDisplayName());
+            goToCreateOrJoin.putExtra("uid", user.getUid());
+
+            System.out.println("UID is " + user.getUid());
+
+            startActivity(goToCreateOrJoin);
 
         } else {
             // Login Failed

@@ -23,13 +23,17 @@ public class CreateOrJoinActivity extends AppCompatActivity {
         Button createGameButton = findViewById(R.id.create_game_button);
         Button joinGameButton = findViewById(R.id.join_game_button);
 
-        final int userUID = 123456;
+        final String username = getIntent().getStringExtra("username");
+        final String userUID = getIntent().getStringExtra("uid");
+
+        System.out.println("CreateOrJoinActivity got extra uid " + userUID);
 
         createGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateOrJoinActivity.this, CreateGameActivity.class);
-                intent.putExtra("userUID", userUID);
+                intent.putExtra("username", username);
+                intent.putExtra("uid", userUID);
 
                 startActivity(intent);
             }
@@ -39,7 +43,8 @@ public class CreateOrJoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateOrJoinActivity.this, JoinGameActivity.class);
-                intent.putExtra("userUID", userUID);
+                intent.putExtra("username", username);
+                intent.putExtra("uid", userUID);
 
                 startActivity(intent);
             }
