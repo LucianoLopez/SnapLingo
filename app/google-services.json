@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "170538969558-o2gbqbuoq3k4j28qoi8u5f65dnacvba7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "teamc.finalproject",
+            "certificate_hash": "d1fa96b8e3b6ebce67907579866a0c7177a1bece"
+          }
+        },
+        {
           "client_id": "170538969558-mrer0r3f2et4amklkdd7k839h3uucha2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
