@@ -13,18 +13,20 @@ public class Game {
     private int joinID;
     private Map<String, Integer> scores; // Acts as the player list
     private List<Word> wordList;
+    private boolean started = false;
 
-    public Game(String creatorUID, int joinID, List<Word> wordList) {
+    public Game(String creatorUID, int joinID, List<Word> wordList, boolean started) {
         this.creatorUID = creatorUID;
         this.joinID = joinID;
         this.wordList = wordList;
+        this.started = started;
 
         scores = new ArrayMap<>();
         // setPlayerScore(creatorUID, 0);
     }
 
     public Game(String creatorUID) {
-        this(creatorUID, FirebaseUtils.getNewGameID(), FirebaseUtils.getNewWordList());
+        this(creatorUID, FirebaseUtils.getNewGameID(), FirebaseUtils.getNewWordList(), false);
     }
 
     public void givePlayerPoints(String playerUID, int points) {

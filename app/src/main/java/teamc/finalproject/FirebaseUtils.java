@@ -60,6 +60,9 @@ public class FirebaseUtils {
 
         DatabaseReference playerListRef = gameRef.child("player_list");
 
+        DatabaseReference startedRef = gameRef.child("started");
+        startedRef.setValue(false);
+
         DatabaseReference playerRef;
         for (String playerUID : game.getPlayerList()) {
             playerRef = playerListRef.child(playerUID);
@@ -69,6 +72,16 @@ public class FirebaseUtils {
         // Set player's game attribute to new game id
         DatabaseReference userRef = usersRef.child(creatorKey);
         userRef.child("game").setValue(game.getJoinID());
+    }
+
+    public static void startGame(int gameID) {
+        DatabaseReference gameRef = getGameRefFromID(gameID);
+        gameRef.child("started").setValue(true);
+    }
+
+    public static void endGame(int gameID) {
+        DatabaseReference gameRef = getGameRefFromID(gameID);
+        gameRef.child("started").setValue(false);
     }
 
     public static void playerJoinGame(String playerUID, int gameID) {

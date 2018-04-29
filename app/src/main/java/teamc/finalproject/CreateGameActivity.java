@@ -36,7 +36,7 @@ public class CreateGameActivity extends AppCompatActivity {
 
         System.out.println("CreateGameActivity got extra uid " + creatorUID);
 
-        Game game = new Game(creatorUID);
+        final Game game = new Game(creatorUID);
 
         TextView code = findViewById(R.id.joinCodeTextView);
         code.setText(Integer.toString(game.getJoinID()));
@@ -104,6 +104,8 @@ public class CreateGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start game
+                FirebaseUtils.startGame(game.getJoinID());
+                // TODO: Switch to playing the game
             }
         });
 

@@ -2,6 +2,7 @@ package teamc.finalproject;
 
 // Created by Andrew
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,13 @@ public class JoinGameActivity extends AppCompatActivity {
                     FirebaseUtils.playerJoinGame(userUID, enteredCode);
 
                     System.out.println("Successfully joined game.");
+
+                    Intent waitForGameIntent = new Intent(JoinGameActivity.this, WaitingForGameActivity.class);
+                    waitForGameIntent.putExtra("uid", userUID);
+                    waitForGameIntent.putExtra("username", username);
+                    waitForGameIntent.putExtra("gameID", enteredCode);
+
+                    startActivity(waitForGameIntent);
                 } else {
                     // Game does not exist
                     AlertDialog.Builder builder = new AlertDialog.Builder(JoinGameActivity.this);

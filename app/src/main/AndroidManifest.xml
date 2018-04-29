@@ -60,6 +60,10 @@
         <activity android:name=".JoinGameActivity">
 
         </activity>
+
+        <activity android:name=".WaitingForGameActivity">
+
+        </activity>
     </application>
 
 </manifest>
