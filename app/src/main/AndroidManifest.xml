@@ -30,6 +30,9 @@
         <activity android:name=".CreateOrJoinActivity">
 
         </activity>
+        <activity android:name=".LoadingScreenActivity">
+
+        </activity>
         <activity
             android:name=".CreateGameActivity"
             android:label="CreateGameActivity">
