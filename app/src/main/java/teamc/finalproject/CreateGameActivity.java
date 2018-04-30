@@ -50,6 +50,7 @@ public class CreateGameActivity extends AppCompatActivity {
         System.out.println("CreateGameActivity got extra uid " + creatorUID);
         new CreateGame().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, creatorUID);
 
+        //FIXME: THIS WAS JUST COPIED AND PASTED INTO onPostExecte of CreateGame()
 //        final Game game = new Game(creatorUID);
 //
 //        TextView code = findViewById(R.id.joinCodeTextView);
