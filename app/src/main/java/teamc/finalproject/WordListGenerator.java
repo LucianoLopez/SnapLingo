@@ -21,26 +21,15 @@ public class WordListGenerator {
      * Use this to get an ArrayList of Word Objects
      */
     String[] words = new String[2];
+    public int size;
+    public HashMap<String, String> lwords;
+    public ArrayList<Word> wordList;
     private final String URI = "http://roger.redevised.com/api/v1";
 
     public ArrayList<Word> getWordList(int size) {
         HashMap<String, String> lwords = new HashMap<>();
-        ArrayList<Word> wordList = new ArrayList<>();
-        try {
-            for (int i = 0; i < size; i++) {
-                executeWordPair();
-                if (words[1] == null || lwords.containsKey(words[0])) {
-                    i -= 1;
-                    continue;
-                }
-                Word input = new Word(words[0], words[1]);
-                wordList.add(input);
-                lwords.put(words[0], words[1]);
-                words = new String[2];
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        wordList = new ArrayList<>();
+        GenerateList gl = new GenerateList();
         return wordList;
     }
     private void executeWordPair() {
@@ -55,10 +44,10 @@ public class WordListGenerator {
     }
 
     private void getObject(ObjectTask ot) throws Exception {
-        ot.execute(URI).get();
+        ot.execute(URI);
     }
     private void getTranslation(SpanishTranslationTask stt) throws Exception {
-        stt.execute(translations(words[0])).get();
+        stt.execute(translations(words[0]));
     }
     /**
      Used to set parameters for the Oxford language Translation API
@@ -71,7 +60,27 @@ public class WordListGenerator {
                 "/translations=" + target_lang;
     }
 
-
+    private class GenerateList extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String...params) {
+            try {
+                for (int i = 0; i < size; i++) {
+                    executeWordPair();
+                    if (words[1] == null || lwords.containsKey(words[0])) {
+                        i -= 1;
+                        continue;
+                    }
+                    Word input = new Word(words[0], words[1]);
+                    wordList.add(input);
+                    lwords.put(words[0], words[1]);
+                    words = new String[2];
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "success";
+        }
+    }
     /**
      * Returns a common everyday object from the Roger Random Object Generator
      * http://roger.redevised.com/roger.redevised.com/api/v1#
