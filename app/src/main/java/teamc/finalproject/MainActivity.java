@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
+    private String userID;
+    private int gameID;
+
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userID = getIntent().getStringExtra("uid");
+        gameID = getIntent().getIntExtra("gameID", 0);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = findViewById(R.id.pager);
@@ -121,8 +127,10 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch(position){
                 case 0:
-                    return WordsFragment.newInstance();
+                    return WordsFragment.newInstance(userID, gameID);
                 case 1:
+                    // I assume you'll want this to say
+                    // return ScoreboardFragment.newInstance(userID, gameID);
                     return ScoreboardFragment.newInstance();
             }
             return null;

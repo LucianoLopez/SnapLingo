@@ -44,7 +44,7 @@ public class WordsFragment extends Fragment {
 
     private static DatabaseReference mGamesRef;
 
-    private static String mGameId;
+    private static int mGameId;
     private static String mUserId;
     private static ArrayList<Word> mWords;
     private static ArrayList<Word> mFoundWords;
@@ -60,13 +60,13 @@ public class WordsFragment extends Fragment {
      * @return A new instance of fragment WordsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WordsFragment newInstance() {
+    public static WordsFragment newInstance(String userID, int gameID) {
         WordsFragment fragment = new WordsFragment();
-        mGameId = "1579";
-        mUserId = "123456";
+        mGameId = gameID;
+        mUserId = userID;
 
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        mGamesRef = db.child("games").child(mGameId);
+        mGamesRef = db.child("games").child(Integer.toString(mGameId));
 
         mWords = new ArrayList<>();
         mFoundWords = new ArrayList<>();

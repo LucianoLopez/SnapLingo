@@ -2,6 +2,7 @@ package teamc.finalproject;
 
 // Created by Andrew
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreateGameActivity extends AppCompatActivity {
 
@@ -73,9 +75,7 @@ public class CreateGameActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String joinedPlayer = dataSnapshot.getKey();
-                adapter.add(joinedPlayer);
-                adapter.notifyDataSetChanged();
-                System.out.println("Adapter count is " + adapter.getCount());
+                updateAdapter(joinedPlayer);
             }
 
             @Override
@@ -105,9 +105,34 @@ public class CreateGameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Start game
                 FirebaseUtils.startGame(game.getJoinID());
-                // TODO: Switch to playing the game
+
+                // Join game
+                Intent joinGameIntent = new Intent(CreateGameActivity.this, MainActivity.class);
+                joinGameIntent.putExtra("uid", creatorUID);
+                joinGameIntent.putExtra("username", username);
+                joinGameIntent.putExtra("gameID", game.getJoinID());
+
+                startActivity(joinGameIntent);
             }
         });
 
+    }
+
+    private void updateAdapter(String newUserUID) {
+        FirebaseUtils.usersRef.child(newUserUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> result = (HashMap<String, String>) dataSnapshot.getValue();
+                System.out.println(result);
+                String newUsername = result.get("name");
+                adapter.add(newUsername);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

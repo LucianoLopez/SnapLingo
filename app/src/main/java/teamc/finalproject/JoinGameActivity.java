@@ -31,7 +31,7 @@ public class JoinGameActivity extends AppCompatActivity {
                 int enteredCode = Integer.parseInt(joinGameEntry.getText().toString());
                 if (FirebaseUtils.doesGameExist(enteredCode)) {
                     // Game exists. Join game.
-                    FirebaseUtils.playerJoinGame(userUID, enteredCode);
+                    FirebaseUtils.playerJoinGame(userUID, username, enteredCode);
 
                     System.out.println("Successfully joined game.");
 

@@ -1,5 +1,6 @@
 package teamc.finalproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,18 +16,23 @@ public class WaitingForGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting_for_start);
 
-        String userUID = getIntent().getStringExtra("uid");
-        String username = getIntent().getStringExtra("username");
-        int gameID = getIntent().getIntExtra("gameID", 0);
+        final String userUID = getIntent().getStringExtra("uid");
+        final String username = getIntent().getStringExtra("username");
+        final int gameID = getIntent().getIntExtra("gameID", 0);
 
         DatabaseReference gameRef = FirebaseUtils.getGameRefFromID(gameID);
         gameRef.child("started").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean gameStarted = (boolean) dataSnapshot.getValue();
-                System.out.println(gameStarted);
                 if (gameStarted) {
-                    System.out.println("Join game");
+                    // Join game
+                    Intent joinGameIntent = new Intent(WaitingForGameActivity.this, MainActivity.class);
+                    joinGameIntent.putExtra("uid", userUID);
+                    joinGameIntent.putExtra("username", username);
+                    joinGameIntent.putExtra("gameID", gameID);
+
+                    startActivity(joinGameIntent);
                 }
             }
 

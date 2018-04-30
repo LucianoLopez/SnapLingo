@@ -2,9 +2,13 @@ package teamc.finalproject;
 
 // Created by Andrew
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -84,12 +88,13 @@ public class FirebaseUtils {
         gameRef.child("started").setValue(false);
     }
 
-    public static void playerJoinGame(String playerUID, int gameID) {
+    public static void playerJoinGame(String playerUID, String username, int gameID) {
         System.out.println("Attempting to add player " + playerUID + " to game " + gameID + ".");
 
         DatabaseReference gameRef = getGameRefFromID(gameID);
         DatabaseReference newPlayerRefInGame = gameRef.child("player_list").child(playerUID);
         newPlayerRefInGame.child("points").setValue(0);
+        newPlayerRefInGame.child("name").setValue(username);
 
         usersRef.child(playerUID).child("game").setValue(gameID);
     }
