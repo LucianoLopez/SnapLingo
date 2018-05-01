@@ -12,6 +12,7 @@ public class Word implements Serializable {
     private int numFound;
 
     public Word() {
+
     }
 
     public Word(String englishTranslation, String foreignTranslation) {

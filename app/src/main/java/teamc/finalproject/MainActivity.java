@@ -127,9 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return WordsFragment.newInstance(userID, gameID);
                 case 1:
-                    // I assume you'll want this to say
-                    // return ScoreboardFragment.newInstance(userID, gameID);
-                    return ScoreboardFragment.newInstance();
+                    return ScoreboardFragment.newInstance(gameID);
             }
             return null;
         }

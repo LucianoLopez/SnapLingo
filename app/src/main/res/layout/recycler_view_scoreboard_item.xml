@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_2"
-    android:paddingTop="@dimen/margin_2"
+    android:background="@android:color/white"
     android:paddingBottom="@dimen/margin_2"
     android:paddingLeft="16dp"
-    android:paddingRight="32dp"
-    android:background="@android:color/white">
+    android:paddingRight="16dp"
+    android:paddingTop="@dimen/margin_2">
 
     <TextView
         android:id="@+id/wordTextView"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:text="Andrew"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/wordTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="arbol"
-        android:textSize="24dp" />
+        android:text="20 Points"
+        android:textAlignment="textEnd"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/imageButton"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="3dp"
-        android:background="@drawable/ic_image_black_24dp"
-        android:layout_alignParentRight="true" />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

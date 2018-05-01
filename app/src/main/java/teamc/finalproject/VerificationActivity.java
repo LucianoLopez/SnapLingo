@@ -389,7 +389,9 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
     private int updateWordsFoundAndPoints(Word word) {
-        // TODO add word to words_found in DB and update user points
+
+        word.foundWord();
+
         return 0;
     }
 

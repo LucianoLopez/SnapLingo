@@ -24,8 +24,7 @@ public class WaitingForGameActivity extends AppCompatActivity {
         gameRef.child("started").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean gameStarted = (boolean) dataSnapshot.getValue();
-                if (gameStarted) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null && (boolean) dataSnapshot.getValue()) {
                     // Join game
                     Intent joinGameIntent = new Intent(WaitingForGameActivity.this, MainActivity.class);
                     joinGameIntent.putExtra("uid", userUID);
