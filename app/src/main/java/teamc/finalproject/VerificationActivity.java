@@ -18,6 +18,7 @@ package teamc.finalproject;
  * limitations under the License.
  */
 
+import android.support.v4.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -466,5 +467,11 @@ public class VerificationActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void showVerificationCorrectDialog(int points) {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = VerificationCorrectDialogFragment.newInstance(points);
+        dialog.show(getSupportFragmentManager(), "VerificationCorrectDialogFragment");
     }
 }

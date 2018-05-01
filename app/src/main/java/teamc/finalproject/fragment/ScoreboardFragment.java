@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
+import teamc.finalproject.MainActivity;
 import teamc.finalproject.R;
 import teamc.finalproject.RecyclerViewScores.ScoresAdapter;
-import teamc.finalproject.RecyclerViewWords.WordsAdapter;
 import teamc.finalproject.Score;
-import teamc.finalproject.Word;
+
 import static java.lang.Math.toIntExact;
 
 /**
@@ -90,6 +87,7 @@ public class ScoreboardFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ((MainActivity) getActivity()).setActionBarTitle("Leaderboard");
     }
 
     @Override
