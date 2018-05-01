@@ -170,14 +170,6 @@ public class CreateGameActivity extends AppCompatActivity {
 
             playerListView.setAdapter(adapter);
 
-            List<Word> dummyData = Word.getDummyData();
-
-            List<Word> fakeFoundWords = new ArrayList<>();
-            fakeFoundWords.add(dummyData.get(0));
-            fakeFoundWords.add(dummyData.get(1));
-
-            FirebaseUtils.setWordsFound(creatorUID, game.getJoinID(), fakeFoundWords);
-
             DatabaseReference gameRef = FirebaseUtils.getGameRefFromID(game.getJoinID());
             DatabaseReference playerListRef = gameRef.child("player_list");
 
