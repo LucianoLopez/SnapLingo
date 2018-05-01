@@ -94,6 +94,9 @@ public class VerificationActivity extends AppCompatActivity {
     private Uri mImageUri = null;
     private String mResponse;
 
+    private String userUID;
+    private int gameID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +108,8 @@ public class VerificationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mWord = (Word) intent.getSerializableExtra("word");
+        userUID = intent.getStringExtra("uid");
+        gameID = intent.getIntExtra("gameID", 0);
 
         verificationCardView = findViewById(R.id.verificationCardView);
         header = findViewById(R.id.header);
@@ -215,8 +220,15 @@ public class VerificationActivity extends AppCompatActivity {
                     Log.w(TAG, "File URI is null");
                 }
             } else {
+                // User hit back button instead of taking a picture
                 Toast.makeText(this, "Taking picture failed.", Toast.LENGTH_SHORT).show();
                 Log.d(getClass().getName(), "value = " + resultCode);
+
+                Intent backToGameIntent = new Intent(VerificationActivity.this, MainActivity.class);
+                backToGameIntent.putExtra("uid", userUID);
+                backToGameIntent.putExtra("gameID", gameID);
+
+                startActivity(backToGameIntent);
             }
         }
     }

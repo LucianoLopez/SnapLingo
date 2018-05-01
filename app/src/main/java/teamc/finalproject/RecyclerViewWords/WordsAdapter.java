@@ -1,5 +1,6 @@
 package teamc.finalproject.RecyclerViewWords;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -59,6 +60,13 @@ public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     public void onClick(View view) {
                         Intent intent = new Intent(context, VerificationActivity.class);
                         intent.putExtra("word", word);
+                        Activity currentActivity = (Activity) context;
+                        System.out.println("The activity is " + currentActivity);
+                        String userUID = currentActivity.getIntent().getStringExtra("uid");
+                        int gameID = currentActivity.getIntent().getIntExtra("gameID", 0);
+
+                        intent.putExtra("uid", userUID);
+                        intent.putExtra("gameID", gameID);
                         context.startActivity(intent);
                     }
                 });
