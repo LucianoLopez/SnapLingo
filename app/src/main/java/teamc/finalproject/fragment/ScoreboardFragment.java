@@ -143,7 +143,7 @@ public class ScoreboardFragment extends Fragment {
 
         return mScores;
     }
-
+  
     private void getScoresFromUsers() {
 
         DatabaseReference wordsRef = mGamesRef.child("player_list");
@@ -166,8 +166,13 @@ public class ScoreboardFragment extends Fragment {
                     }
 
                     Long points = (Long) child.child("points").getValue();
+                    int userPoints = 0;
 
-                    Score newScore = new Score(userName, toIntExact(points));
+                    if (points != null) {
+                        userPoints = toIntExact(points);
+                    }
+
+                    Score newScore = new Score(userName, userPoints);
 
                     mScores.add(0, newScore);
 

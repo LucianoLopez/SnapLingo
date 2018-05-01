@@ -93,7 +93,6 @@ public class FirebaseUtils {
 
         DatabaseReference gameRef = getGameRefFromID(gameID);
         DatabaseReference newPlayerRefInGame = gameRef.child("player_list").child(playerUID);
-        newPlayerRefInGame.child("points").setValue(0);
         newPlayerRefInGame.child("name").setValue(username);
 
         usersRef.child(playerUID).child("game").setValue(gameID);

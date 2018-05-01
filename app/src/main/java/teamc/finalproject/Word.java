@@ -1,5 +1,8 @@
 package teamc.finalproject;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -9,7 +12,9 @@ public class Word implements Serializable {
 
     private String englishTranslation;
     private String foreignTranslation;
-    private int numFound;
+    public int numFound = 0;
+    public String gameID;
+    public int firebaseWordIndex;
 
     public Word() {
 
@@ -18,7 +23,7 @@ public class Word implements Serializable {
     public Word(String englishTranslation, String foreignTranslation) {
         this.englishTranslation = englishTranslation;
         this.foreignTranslation = foreignTranslation;
-        this.numFound = 0;
+        numFound = 0;
     }
 
     public String getEnglishTranslation() {
@@ -49,6 +54,8 @@ public class Word implements Serializable {
 
     public void foundWord() {
         this.numFound += 1;
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.child("games").child(gameID).child("words").child(String.valueOf(firebaseWordIndex)).child("numFound").setValue(this.numFound);
     }
 
     @Override

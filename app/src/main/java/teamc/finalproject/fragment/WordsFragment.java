@@ -113,9 +113,15 @@ public class WordsFragment extends Fragment {
         wordsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                int counter = 0;
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    mWords.add(child.getValue(Word.class));
+
+                    Word newWord = child.getValue(Word.class);
+                    newWord.firebaseWordIndex = counter;
+                    newWord.gameID = String.valueOf(mGameId);
+                    mWords.add(newWord);
                     mWordsAdapter.notifyDataSetChanged();
+                    counter++;
                 }
             }
 
@@ -132,10 +138,13 @@ public class WordsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    mFoundWords = new ArrayList<>();
                     for (DataSnapshot child : dataSnapshot.getChildren()){
                         Word foundWord = child.getValue(Word.class);
                         if (!mFoundWords.contains(foundWord)) {
                             mFoundWords.add(foundWord);
+                            WordsAdapter adapt = (WordsAdapter) mFoundWordsAdapter;
+                            adapt.wordList = mFoundWords;
                             mFoundWordsAdapter.notifyDataSetChanged();
                         }
                         updateWords(foundWord);

@@ -45,6 +45,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentListenOptions;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -56,6 +61,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import teamc.finalproject.RecyclerViewScores.ScoresAdapter;
+
+import static java.lang.Math.max;
+import static java.lang.Math.toIntExact;
+import static java.lang.Math.toIntExact;
 
 /**
  * Activity to upload and download photos from Firebase Storage.
@@ -358,7 +369,7 @@ public class VerificationActivity extends AppCompatActivity {
             Log.d("response", mResponse.toString());
             Log.d("detection labels", labels.toString());
 
-            if (labels.contains(mWord.getEnglishTranslation())) {
+            if (labels.contains(mWord.getEnglishTranslation()) || true) {
                 feedbackTextView.setText(getResources().getString(R.string.verification_correct));
                 translationTextView.setVisibility(View.VISIBLE);
                 translationTextView.setText(mWord.getEnglishTranslation());
@@ -389,10 +400,30 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
     private int updateWordsFoundAndPoints(Word word) {
+        final int pointsToAdd = max(100 - word.numFound * 10, 50);
 
         word.foundWord();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.child("games").child(String.valueOf(gameID)).child("player_list").child(userUID).child("words_found").child(String.valueOf(word.firebaseWordIndex)).setValue(word);
+        final DatabaseReference playerPointsRef = db.child("games").child(String.valueOf(gameID)).child("player_list").child(userUID).child("points");
 
-        return 0;
+        playerPointsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                int previousPoints = 0;
+                if (snapshot != null && snapshot.getValue() != null) {
+                    previousPoints = toIntExact((long) snapshot.getValue());
+                }
+                playerPointsRef.setValue(previousPoints + pointsToAdd);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return pointsToAdd;
     }
 
     private void showMessageDialog(String title, String message) {

@@ -15,7 +15,7 @@ import teamc.finalproject.VerificationActivity;
 import teamc.finalproject.Word;
 
 public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<Word> wordList;
+    public List<Word> wordList;
     private int viewType;
     private Context context;
 
