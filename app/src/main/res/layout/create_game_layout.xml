@@ -6,9 +6,11 @@
     <TextView
         android:id="@+id/joinLabelTextView"
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Join Code:"
+        android:textColor="@color/textColor"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
@@ -16,8 +18,11 @@
         android:id="@+id/joinCodeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:text="000000"
+        android:textColor="@color/textColor"
         android:textAlignment="center"
+        android:textSize="36sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
 
@@ -25,13 +30,17 @@
         android:id="@+id/playerListView"
         android:layout_width="match_parent"
         android:layout_height="200dp">
-
     </ListView>
 
     <Button
         android:id="@+id/startGameButton"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_gravity="center"
+        android:paddingTop="@dimen/buttonVerticalPadding"
+        android:paddingBottom="@dimen/buttonVerticalPadding"
+        android:textStyle="bold"
+        android:textSize="24sp"
         android:text="Start" />
 
 </LinearLayout>

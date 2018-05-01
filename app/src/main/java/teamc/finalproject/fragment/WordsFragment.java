@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import teamc.finalproject.MainActivity;
 import teamc.finalproject.R;
 import teamc.finalproject.RecyclerViewWords.WordsAdapter;
 import teamc.finalproject.VerticalSpaceItemDecoration;
@@ -76,6 +77,7 @@ public class WordsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MainActivity) getActivity()).setActionBarTitle("Words");
     }
 
     @Override

@@ -4,16 +4,34 @@
     android:orientation="vertical">
 
     <Button
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_width="@dimen/buttonWidth"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="@dimen/createOrJoinButtonVerticalPadding"
+        android:paddingBottom="@dimen/createOrJoinButtonVerticalPadding"
         android:id="@+id/create_game_button"
-        android:text="Create Game" />
+        android:text="Create Game"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:bottomRightRadius="10dp"
+        android:bottomLeftRadius="10dp"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp"/>
 
     <Button
         android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/buttonWidth"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="@dimen/createOrJoinButtonVerticalPadding"
+        android:paddingBottom="@dimen/createOrJoinButtonVerticalPadding"
         android:id="@+id/join_game_button"
-        android:text="Join Game" />
+        android:text="Join Game"
+        android:textStyle="bold"
+        android:textSize="32sp"
+        android:bottomRightRadius="10dp"
+        android:bottomLeftRadius="10dp"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp" />
 </LinearLayout>

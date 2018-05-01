@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">SnapLingo</string>
+
+    <string name="premise_prologue">The year is 2842.</string>
+    <string name="premise_body">An ancient lost language called Spanish has recently been discovered on devices from the 21st century. You are an archaeologist trying to decrypt the undecipherable glyphs and be the first to uncover its secrets.</string>
+    <string name="premise_epilogue">The hunt begins now.</string>
+
     <string name="camera_button_text">Take Photo</string>
     <string name="sign_in_prompt">Sign In to begin</string>
     <string name="take_photo_prompt">Take a Photo</string>

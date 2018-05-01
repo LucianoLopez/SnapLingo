@@ -8,4 +8,7 @@
     <dimen name="margin_2">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="word_list_item_vertical_padding">20dp</dimen>
+    <dimen name="buttonWidth">300dp</dimen>
+    <dimen name="createOrJoinButtonVerticalPadding">50dp</dimen>
+    <dimen name="buttonVerticalPadding">32dp</dimen>
 </resources>

@@ -15,8 +15,6 @@ import android.widget.TextView;
 import teamc.finalproject.fragment.ScoreboardFragment;
 import teamc.finalproject.fragment.WordsFragment;
 
-import java.util.HashMap;
-
 public class MainActivity extends AppCompatActivity {
 
     private static int NUM_ITEMS = 2;
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        getSupportActionBar().setTitle("Game");
+        getSupportActionBar().setTitle("SnapLingo");
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -140,6 +138,10 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return NUM_ITEMS;
         }
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
 }

@@ -3,28 +3,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/join_instructions"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter join code:"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
     <EditText
         android:id="@+id/code_entry"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_width="294dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:textSize="24sp"
         android:ems="10"
         android:inputType="number"
-        android:hint="Code" />
+        android:gravity="center"
+        android:hint="Join Code"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        android:background="@drawable/edit_text_style" />
 
     <Button
         android:id="@+id/join_this_game"
         android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_gravity="center"
+        android:paddingTop="@dimen/buttonVerticalPadding"
+        android:paddingBottom="@dimen/buttonVerticalPadding"
+        android:textStyle="bold"
+        android:textSize="24sp"
         android:layout_height="wrap_content"
         android:text="Join Game" />
 

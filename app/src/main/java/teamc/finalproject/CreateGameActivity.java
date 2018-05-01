@@ -43,6 +43,8 @@ public class CreateGameActivity extends AppCompatActivity {
         setContentView(R.layout.create_game_layout);
         code = findViewById(R.id.joinCodeTextView);
 
+        getSupportActionBar().setTitle("Create Game");
+
         // Create the game
         creatorUID = getIntent().getStringExtra("uid");
         final String username = getIntent().getStringExtra("username");

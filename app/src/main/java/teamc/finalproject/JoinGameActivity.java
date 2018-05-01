@@ -21,6 +21,8 @@ public class JoinGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_game_layout);
 
+        getSupportActionBar().setTitle("Join Game");
+
         final EditText joinGameEntry = findViewById(R.id.code_entry);
 
         Button joinGameButton = findViewById(R.id.join_this_game);

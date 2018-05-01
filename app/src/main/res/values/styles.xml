@@ -8,10 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Button.Custom</item>
     </style>
 
     <style name="MyTextViewStyle" parent="android:Widget.TextView">
         <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Button.Custom">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>
