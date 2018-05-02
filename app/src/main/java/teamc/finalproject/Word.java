@@ -1,10 +1,11 @@
 package teamc.finalproject;
 
+import android.net.Uri;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class Word implements Serializable {
     public int numFound = 0;
     public String gameID;
     public int firebaseWordIndex;
+    public Uri imageURI;
 
     public Word() {
 
@@ -24,6 +26,9 @@ public class Word implements Serializable {
         this.englishTranslation = englishTranslation;
         this.foreignTranslation = foreignTranslation;
         numFound = 0;
+    }
+    public Uri getImageURI() {
+        return imageURI;
     }
 
     public String getEnglishTranslation() {
@@ -57,6 +62,11 @@ public class Word implements Serializable {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         db.child("games").child(gameID).child("words").child(String.valueOf(firebaseWordIndex)).child("numFound").setValue(this.numFound);
     }
+
+    public void setImageURI(Uri uri) {
+        imageURI = uri;
+    }
+
 
     @Override
     public String toString() {

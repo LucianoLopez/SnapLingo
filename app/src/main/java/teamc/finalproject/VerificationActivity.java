@@ -250,6 +250,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         // Save the File URI
         mImageUri = fileUri;
+        mWord.setImageURI(mImageUri);
 
         // Clear the last download, if any
         updateUI(mAuth.getCurrentUser());
