@@ -18,7 +18,6 @@ package teamc.finalproject;
  * limitations under the License.
  */
 
-import android.support.v4.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -63,10 +62,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import teamc.finalproject.RecyclerViewScores.ScoresAdapter;
-
 import static java.lang.Math.max;
-import static java.lang.Math.toIntExact;
 import static java.lang.Math.toIntExact;
 
 /**
@@ -96,6 +92,7 @@ public class VerificationActivity extends AppCompatActivity {
     private CardView verificationCardView;
     private ConstraintLayout header;
     private TextView feedbackTextView;
+    private TextView pointsTextView;
     private FloatingActionButton actionButton;
     private TextView wordTitle;
     private TextView translationTextView;
@@ -125,12 +122,14 @@ public class VerificationActivity extends AppCompatActivity {
 
         verificationCardView = findViewById(R.id.verificationCardView);
         header = findViewById(R.id.header);
+        pointsTextView = findViewById(R.id.pointsTextView);
         feedbackTextView = findViewById(R.id.feedbackTextView);
         actionButton = findViewById(R.id.actionButton);
         wordTitle = findViewById(R.id.titleTextView);
         translationTextView = findViewById(R.id.translationTextView);
         photoImageView = findViewById(R.id.photoImageView);
 
+        pointsTextView.setVisibility(View.GONE);
         verificationCardView.setVisibility(View.GONE);
         translationTextView.setVisibility(View.GONE);
 
@@ -370,7 +369,7 @@ public class VerificationActivity extends AppCompatActivity {
             Log.d("response", mResponse.toString());
             Log.d("detection labels", labels.toString());
 
-            if (labels.contains(mWord.getEnglishTranslation()) || true) {
+            if (labels.contains(mWord.getEnglishTranslation())) {
                 feedbackTextView.setText(getResources().getString(R.string.verification_correct));
                 translationTextView.setVisibility(View.VISIBLE);
                 translationTextView.setText(mWord.getEnglishTranslation());
@@ -382,6 +381,8 @@ public class VerificationActivity extends AppCompatActivity {
                     }
                 });
                 int newPoints = updateWordsFoundAndPoints(mWord);
+                pointsTextView.setText("+" + Integer.toString(newPoints) + "Fame");
+
             } else {
                 feedbackTextView.setText(getResources().getString(R.string.verification_incorrect));
                 header.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_round_incorrect));
@@ -467,11 +468,5 @@ public class VerificationActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void showVerificationCorrectDialog(int points) {
-        // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = VerificationCorrectDialogFragment.newInstance(points);
-        dialog.show(getSupportFragmentManager(), "VerificationCorrectDialogFragment");
     }
 }

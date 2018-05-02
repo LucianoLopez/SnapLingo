@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private MenuItem prevMenuItem;
 
+    private String mTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        getSupportActionBar().setTitle("SnapLingo");
+        mTitle = "Words";
+        getSupportActionBar().setTitle(mTitle);
 
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+                getSupportActionBar().setTitle(mTitle);
             }
 
             @Override
@@ -90,12 +94,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    mTitle = "Words";
                     mPager.setCurrentItem(0);
                     return true;
                 case R.id.navigation_dashboard:
+                    mTitle = "Leaderboard";
                     mPager.setCurrentItem(1);
                     return true;
             }
+            getSupportActionBar().setTitle(mTitle);
             return false;
         }
     };
@@ -125,10 +132,13 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch(position){
                 case 0:
+                    mTitle = "Words";
                     return WordsFragment.newInstance(userID, gameID);
                 case 1:
+                    mTitle = "Leaderboard";
                     return ScoreboardFragment.newInstance(gameID);
             }
+            getSupportActionBar().setTitle(mTitle);
             return null;
         }
 
