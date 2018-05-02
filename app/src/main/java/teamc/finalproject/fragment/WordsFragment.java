@@ -18,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import teamc.finalproject.MainActivity;
 import teamc.finalproject.R;
 import teamc.finalproject.RecyclerViewWords.WordsAdapter;
 import teamc.finalproject.VerticalSpaceItemDecoration;
@@ -63,21 +62,26 @@ public class WordsFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static WordsFragment newInstance(String userID, int gameID) {
         WordsFragment fragment = new WordsFragment();
-        mGameId = gameID;
-        mUserId = userID;
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        mGamesRef = db.child("games").child(Integer.toString(mGameId));
+        Bundle args = new Bundle();
+        args.putInt("gameID", gameID);
+        args.putString("userID", userID);
+        fragment.setArguments(args);
 
-        mWords = new ArrayList<>();
-        mFoundWords = new ArrayList<>();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainActivity) getActivity()).setActionBarTitle("Words");
+        mGameId = getArguments().getInt("gameID");;
+        mUserId = getArguments().getString("userID");;
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        mGamesRef = db.child("games").child(Integer.toString(mGameId));
+
+        mWords = new ArrayList<>();
+        mFoundWords = new ArrayList<>();
     }
 
     @Override

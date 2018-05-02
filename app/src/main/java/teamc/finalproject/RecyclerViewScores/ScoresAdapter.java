@@ -19,12 +19,17 @@ public class ScoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private int viewType;
     private Context context;
     private ColorGenerator mColorGenerator;
+    private TextDrawable.IShapeBuilder mBuilder;
 
     public ScoresAdapter(List<Score> scoreList, int viewType, Context context){
         this.scoreList = scoreList;
         this.viewType = viewType;
         this.context = context;
-        this.mColorGenerator = ColorGenerator.MATERIAL;
+        this.mColorGenerator = ColorGenerator.DEFAULT;
+        mBuilder = TextDrawable.builder()
+                                .beginConfig()
+                                    .withBorder(4)
+                                .endConfig();
     }
 
     @Override
@@ -44,15 +49,27 @@ public class ScoresAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ScoresViewHolder foundWordViewHolder = (ScoresViewHolder) holder;
         foundWordViewHolder.mWordTextView.setText(score.getUserName());
         foundWordViewHolder.mScoresTextView.setText(String.valueOf(score.getScore()));
-        foundWordViewHolder.mPlaceNumberTextView.setText(Integer.toString(position + 1));
-        int color = mColorGenerator.getRandomColor();
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(score.getUserName().substring(0, 1), color);
+        foundWordViewHolder.mPlaceNumberTextView.setText(ordinal(position + 1));
+        int color = mColorGenerator.getColor(score.getUserName());
+        TextDrawable drawable = mBuilder.buildRound(score.getUserName().substring(0, 1), color);
         foundWordViewHolder.mIconImageView.setImageDrawable(drawable);
     }
 
     @Override
     public int getItemCount() {
         return this.scoreList.size();
+    }
+
+    private String ordinal(int i) {
+        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        switch (i % 100) {
+            case 11:
+            case 12:
+            case 13:
+                return i + "th";
+            default:
+                return i + suffixes[i % 10];
+
+        }
     }
 }
