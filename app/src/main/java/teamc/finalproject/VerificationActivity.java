@@ -413,7 +413,8 @@ public class VerificationActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 int previousPoints = 0;
                 if (snapshot != null && snapshot.getValue() != null) {
-                    previousPoints = toIntExact((long) snapshot.getValue());
+                    long x = 3;
+                    previousPoints = ((Long) snapshot.getValue()).intValue();
                 }
                 playerPointsRef.setValue(previousPoints + pointsToAdd);
             }
