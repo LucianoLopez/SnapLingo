@@ -48,16 +48,16 @@ public class FirebaseUtils {
 //        WordListGenerator wlg = new WordListGenerator();
 //        List<Word> wordList = wlg.getWordList(10);
         List<Word> wordList = new ArrayList<>();
-        wordList.add(new Word("notebook", "Cuaderno")); //1
-        wordList.add(new Word("wallet", "Billetera")); //2
-        wordList.add(new Word("sunglasses", "Gafas de sol")); //3
-        wordList.add(new Word("pencil", "Lápiz")); //4
-        wordList.add(new Word("chair", "Silla")); //5
-        wordList.add(new Word("hat", "Sombrero")); //6
-        wordList.add(new Word("apple", "Manzana")); //7
-        wordList.add(new Word("computer", "Computadora")); //8
-        wordList.add(new Word("eraser", "Borrador")); //9
-        wordList.add(new Word("person", "Persona")); //10 shoe, zapato
+        wordList.add(new Word("Notebook", "Cuaderno")); //1
+        wordList.add(new Word("Wallet", "Billetera")); //2
+        wordList.add(new Word("Sunglasses", "Gafas de sol")); //3
+        wordList.add(new Word("Pencil", "Lápiz")); //4
+        wordList.add(new Word("Chair", "Silla")); //5
+        wordList.add(new Word("Hat", "Sombrero")); //6
+        wordList.add(new Word("Apple", "Manzana")); //7
+        wordList.add(new Word("Computer", "Computadora")); //8
+        wordList.add(new Word("Eraser", "Borrador")); //9
+        wordList.add(new Word("Person", "Persona")); //10 shoe, zapato
         return wordList;
     }
 
