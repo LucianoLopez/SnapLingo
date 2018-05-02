@@ -17,12 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import teamc.finalproject.MainActivity;
 import teamc.finalproject.R;
+import teamc.finalproject.RecyclerViewScores.DividerItemDecoration;
 import teamc.finalproject.RecyclerViewScores.ScoresAdapter;
 import teamc.finalproject.Score;
-
-import static java.lang.Math.toIntExact;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,15 +65,10 @@ public class ScoreboardFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static ScoreboardFragment newInstance(int gameID) {
         ScoreboardFragment fragment = new ScoreboardFragment();
+
         Bundle args = new Bundle();
+        args.putInt("gameID", gameID);
         fragment.setArguments(args);
-
-        mGameId = gameID;
-
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        mGamesRef = db.child("games").child(Integer.toString(mGameId));
-
-        mScores = new ArrayList<>();
 
         return fragment;
     }
@@ -84,10 +77,13 @@ public class ScoreboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mGameId = getArguments().getInt("gameID");;
+
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+            mGamesRef = db.child("games").child(Integer.toString(mGameId));
+
+            mScores = new ArrayList<>();
         }
-        ((MainActivity) getActivity()).setActionBarTitle("Leaderboard");
     }
 
     @Override
@@ -99,10 +95,11 @@ public class ScoreboardFragment extends Fragment {
 
         mScoresRecyclerView = view.findViewById(R.id.recyclerView);
         mScoresLayoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), R.drawable.scores_divider);
+        mScoresRecyclerView.addItemDecoration(dividerItemDecoration);
         mScoresRecyclerView.setLayoutManager(mScoresLayoutManager);
         mScoresAdapter = new ScoresAdapter(getScores(), 0, getContext());
         mScoresRecyclerView.setAdapter(mScoresAdapter);
-
 
         return view;
     }
@@ -122,6 +119,7 @@ public class ScoreboardFragment extends Fragment {
                     String name = (String) userSnap.child("name").getValue();
                     if (name == null) {
                         continue;
+
                     }
                     String uid = (String) userSnap.getKey();
                     User newUser = new User(uid, name);
