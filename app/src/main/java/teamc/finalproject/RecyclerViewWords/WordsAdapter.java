@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import teamc.finalproject.ImageReviewActivity;
 import teamc.finalproject.R;
 import teamc.finalproject.VerificationActivity;
 import teamc.finalproject.Word;
@@ -75,6 +76,20 @@ public class WordsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case 1:
                 FoundWordViewHolder foundWordViewHolder = (FoundWordViewHolder) holder;
                 foundWordViewHolder.mWordTextView.setText(word.getForeignTranslation());
+                foundWordViewHolder.mImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, ImageReviewActivity.class);
+                        intent.putExtra("word", word);
+                        Activity currentActivity = (Activity) context;
+                        String userUID = currentActivity.getIntent().getStringExtra("uid");
+                        int gameID = currentActivity.getIntent().getIntExtra("gameID", 0);
+
+                        intent.putExtra("uid", userUID);
+                        intent.putExtra("gameID", gameID);
+                        context.startActivity(intent);
+                    }
+                });
                 break;
         }
     }

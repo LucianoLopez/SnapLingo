@@ -63,7 +63,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static java.lang.Math.max;
-import static java.lang.Math.toIntExact;
 
 /**
  * Activity to upload and download photos from Firebase Storage.
@@ -249,7 +248,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         // Save the File URI
         mImageUri = fileUri;
-        mWord.setImageURI(mImageUri);
+        mWord.setImageURI(mImageUri.toString()); /* Set by Luciano */
 
         // Clear the last download, if any
         updateUI(mAuth.getCurrentUser());
@@ -300,6 +299,7 @@ public class VerificationActivity extends AppCompatActivity {
                         "com.example.android.fileprovider",
                         photoFile);
                 mImageUri = photoURI;
+                mWord.setImageURI(photoURI.toString()); /* WAS ADDED BY LUCIANO */
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
@@ -350,6 +350,8 @@ public class VerificationActivity extends AppCompatActivity {
         // Got a new intent from MyUploadService with a success or failure
         mDownloadUrl = intent.getParcelableExtra(MyUploadService.EXTRA_DOWNLOAD_URL);
         mImageUri = intent.getParcelableExtra(MyUploadService.EXTRA_FILE_URI);
+
+        mWord.setImageURI(mImageUri.toString()); /* set by luciano */
 
         updateUI(mAuth.getCurrentUser());
     }

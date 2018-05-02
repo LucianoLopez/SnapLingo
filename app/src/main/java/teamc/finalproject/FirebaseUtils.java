@@ -57,7 +57,7 @@ public class FirebaseUtils {
         wordList.add(new Word("apple", "Manzana")); //7
         wordList.add(new Word("computer", "Computadora")); //8
         wordList.add(new Word("eraser", "Borrador")); //9
-        wordList.add(new Word("shoe", "zapato")); //10
+        wordList.add(new Word("person", "Persona")); //10 shoe, zapato
         return wordList;
     }
 

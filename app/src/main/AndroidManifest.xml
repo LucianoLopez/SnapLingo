@@ -23,6 +23,7 @@
         <activity android:name=".VerificationActivity"></activity>
         <activity android:name=".CreateOrJoinActivity">
         </activity>
+        <activity android:name=".ImageReviewActivity"></activity>
         <activity android:name=".LoadingScreenActivity">
 
         </activity>
