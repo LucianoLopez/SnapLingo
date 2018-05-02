@@ -22,7 +22,7 @@ public class Game {
         this.started = started;
 
         scores = new ArrayMap<>();
-        // setPlayerScore(creatorUID, 0);
+        setPlayerScore(creatorUID, 0);
     }
 
     public Game(String creatorUID) {

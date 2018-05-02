@@ -15,8 +15,12 @@ public class JoinGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final String userUID = getIntent().getStringExtra("uid");
-        final String username = getIntent().getStringExtra("username");
+        // final String userUID = getIntent().getStringExtra("uid");
+        // final String username = getIntent().getStringExtra("username");
+
+        // For the demo
+        final String userUID = "1EldNNVIQVg8qLHDHMPlhlUpwuj2";
+        final String username = "Bob";
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.join_game_layout);
