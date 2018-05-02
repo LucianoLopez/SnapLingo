@@ -28,6 +28,7 @@ import java.util.Map;
 public class CreateGameActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
+    private List<String> playerList;
     private ProgressDialog mProgressDialog;
     private Game game;
     private Context context;
@@ -46,8 +47,12 @@ public class CreateGameActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Create Game");
 
         // Create the game
-        creatorUID = getIntent().getStringExtra("uid");
-        final String username = getIntent().getStringExtra("username");
+        // creatorUID = getIntent().getStringExtra("uid");
+        // final String username = getIntent().getStringExtra("username");
+
+        // For the demo
+        creatorUID = "cGSYeyWf2ENPsHlOvlJaBo4FMXG3";
+        final String username = "Alice";
 
         System.out.println("CreateGameActivity got extra uid " + creatorUID);
         new CreateGame().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, creatorUID);
@@ -158,10 +163,12 @@ public class CreateGameActivity extends AppCompatActivity {
 
             // Show players who have joined the game
 
-            final List<String> playerList = new ArrayList<>();
+            playerList = new ArrayList<>();
+
+            System.out.println("Game playerList is " + game.getPlayerList());
 
             for (String playerID : game.getPlayerList()) {
-                playerList.add(playerID);
+                updateAdapter(playerID);
             }
 
             final ListView playerListView = findViewById(R.id.playerListView);
@@ -219,7 +226,7 @@ public class CreateGameActivity extends AppCompatActivity {
             });
 
         }
-        }
+    }
 
     private void showProgressDialog(String caption) {
         if (mProgressDialog == null) {
@@ -243,8 +250,11 @@ public class CreateGameActivity extends AppCompatActivity {
                 Map<String, String> result = (HashMap<String, String>) dataSnapshot.getValue();
                 System.out.println(result);
                 String newUsername = result.get("name");
-                adapter.add(newUsername);
-                adapter.notifyDataSetChanged();
+                // Only add person if they weren't there already.
+                if (!playerList.contains(newUsername)) {
+                    adapter.add(newUsername);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override

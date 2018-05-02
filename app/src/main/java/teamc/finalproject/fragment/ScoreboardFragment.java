@@ -167,7 +167,7 @@ public class ScoreboardFragment extends Fragment {
                     int userPoints = 0;
 
                     if (points != null) {
-                        userPoints = toIntExact(points);
+                        userPoints = points.intValue(); // toIntExact() is not supported
                     }
 
                     Score newScore = new Score(userName, userPoints);
