@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.view.View;
 
 public class LoadingScreenActivity extends Activity {
-    /*
+    /**
     Right now this class is useless...
      */
 

@@ -2,13 +2,10 @@ package teamc.finalproject;
 
 // Created by Andrew
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -48,8 +45,19 @@ public class FirebaseUtils {
     }
 
     public static List<Word> getNewWordList() {
-        WordListGenerator wlg = new WordListGenerator();
-        List<Word> wordList = wlg.getWordList(10);
+//        WordListGenerator wlg = new WordListGenerator();
+//        List<Word> wordList = wlg.getWordList(10);
+        List<Word> wordList = new ArrayList<>();
+        wordList.add(new Word("notebook", "Cuaderno")); //1
+        wordList.add(new Word("wallet", "Billetera")); //2
+        wordList.add(new Word("sunglasses", "Gafas de sol")); //3
+        wordList.add(new Word("pencil", "Lápiz")); //4
+        wordList.add(new Word("chair", "Silla")); //5
+        wordList.add(new Word("hat", "Sombrero")); //6
+        wordList.add(new Word("apple", "Manzana")); //7
+        wordList.add(new Word("computer", "Computadora")); //8
+        wordList.add(new Word("eraser", "Borrador")); //9
+        wordList.add(new Word("shoe", "zapato")); //10
         return wordList;
     }
 
